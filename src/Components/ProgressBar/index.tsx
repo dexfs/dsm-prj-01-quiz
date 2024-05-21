@@ -1,6 +1,12 @@
 import classNames from "classnames";
 import S from './styles.module.css'
-export function ProgressBar(props) {
+
+interface ProgressBarProps {
+    size: number;
+    currentStep: number;
+}
+
+export function ProgressBar(props: ProgressBarProps) {
     const progressBarSteps = Array.from({length: props.size}, (_, i) => i + 1)
     return (
         <div className={S.container}>

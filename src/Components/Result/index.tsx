@@ -1,7 +1,13 @@
 import S from "./styles.module.css";
-import {Button} from "../Button/index.jsx";
+import {Button} from "../Button/index.tsx";
 
-export function Result(props) {
+interface ResultProps {
+    correctAnswersCount: number;
+    questions: number;
+    handleTryAgain: () => void;
+}
+
+export function Result(props: ResultProps) {
     return (
         <div className={S.container}>
             <h1 className={S.title}>Resultado</h1>

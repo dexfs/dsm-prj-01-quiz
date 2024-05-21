@@ -1,9 +1,9 @@
-import {useState} from "react";
-import {QuestionAnswer} from "../QuestionAnswer/index.jsx";
+import {useState, MouseEvent} from "react";
+import {QuestionAnswer} from "../QuestionAnswer/index.tsx";
 import S from './styles.module.css'
-import {Button} from "../Button/index.jsx";
-import {Result} from "../Result/index.jsx";
-import {ProgressBar} from "../ProgressBar/index.jsx";
+import {Button} from "../Button/index.tsx";
+import {Result} from "../Result/index.tsx";
+import {ProgressBar} from "../ProgressBar/index.tsx";
 
 const QUESTIONS =  [
     {
@@ -63,14 +63,19 @@ const QUESTIONS =  [
     },
 ];
 
-
+export interface Question {
+    id: number;
+    question: string;
+    answers: string[];
+    correctAnswer: string;
+}
 
 export function Quiz() {
     // states
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-    const [correctAnswersCount, setCorrectAnswersCount] = useState(0)
-    const [isCurrentQuestionAnswered, setIsCurrentQuestionAnswered] = useState(false)
-    const [isTakingQuiz, setIsTakingQuiz] = useState(true)
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0)
+    const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0)
+    const [isCurrentQuestionAnswered, setIsCurrentQuestionAnswered] = useState<boolean>(false)
+    const [isTakingQuiz, setIsTakingQuiz] = useState<boolean>(true)
 
     // variables
     const currentQuestionNumber = currentQuestionIndex + 1;
@@ -78,7 +83,7 @@ export function Quiz() {
 
 
     // handlers
-    const handleAnswerQuestion = (event, question, answer) => {
+    const handleAnswerQuestion = (event: MouseEvent<HTMLButtonElement>, question: Question, answer: string): void => {
         if (isCurrentQuestionAnswered) return
         const isCorrectAnswer = question.correctAnswer === answer;
 
@@ -141,9 +146,7 @@ export function Quiz() {
                         handleTryAgain={handleTryAgain}
                     />
                 )}
-
             </div>
-
         </div>
     )
 }
