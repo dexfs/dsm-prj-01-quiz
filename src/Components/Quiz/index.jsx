@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {QuestionAnswer} from "../QuestionAnswer/index.jsx";
 import S from './styles.module.css'
+import {Button} from "../Button/index.jsx";
 
 const QUESTIONS =  [
     {
@@ -63,7 +64,7 @@ const QUESTIONS =  [
 
 
 export function Quiz() {
-    const currentQuestion = QUESTIONS[0];
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [correctAnswersCount, setCorrectAnswersCount] = useState(0)
     const [isCurrentQuestionAnswered, setIsCurrentQuestionAnswered] = useState(false)
     const handleAnswerQuestion = (event, question, answer) => {
@@ -79,12 +80,21 @@ export function Quiz() {
         setIsCurrentQuestionAnswered(true)
     }
 
+    const handleNextQuestion = () => {
+        if (currentQuestionIndex + 1 < QUESTIONS.length) {
+            setCurrentQuestionIndex(index => index + 1)
+        }
+
+        setIsCurrentQuestionAnswered(false)
+    }
+
+    const currentQuestion = QUESTIONS[currentQuestionIndex];
     return (
         <div className={S.container}>
             <div className={S.card}>
                 <div className={S.quiz}>
                     <header className={S.quizHeader}>
-                        <span className={S.questionCount}>PERGUNTA 1/3</span>
+                        <span className={S.questionCount}>PERGUNTA {currentQuestionIndex+1}/{QUESTIONS.length}</span>
                         <p className={S.question}>
                             {currentQuestion.question}
                         </p>
@@ -100,6 +110,7 @@ export function Quiz() {
                             </li>
                         ))}
                     </ul>
+                    {isCurrentQuestionAnswered && <Button onClick={handleNextQuestion}>Próxima pergunta</Button>}
                 </div>
 
             </div>
