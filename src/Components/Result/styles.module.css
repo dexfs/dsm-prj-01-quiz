@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+
+
+.title {
+    margin-bottom: 24px;
+    color: #000b39;
+}
+
+.subtitle {
+    margin-bottom: 40px;
+    color: #000b39;
+}

@@ -2,6 +2,7 @@ import {useState} from "react";
 import {QuestionAnswer} from "../QuestionAnswer/index.jsx";
 import S from './styles.module.css'
 import {Button} from "../Button/index.jsx";
+import {Result} from "../Result/index.jsx";
 
 const QUESTIONS =  [
     {
@@ -67,6 +68,8 @@ export function Quiz() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [correctAnswersCount, setCorrectAnswersCount] = useState(0)
     const [isCurrentQuestionAnswered, setIsCurrentQuestionAnswered] = useState(false)
+    const [isTakingQuiz, setIsTakingQuiz] = useState(true)
+
     const handleAnswerQuestion = (event, question, answer) => {
         if (isCurrentQuestionAnswered) return
         const isCorrectAnswer = question.correctAnswer === answer;
@@ -83,35 +86,55 @@ export function Quiz() {
     const handleNextQuestion = () => {
         if (currentQuestionIndex + 1 < QUESTIONS.length) {
             setCurrentQuestionIndex(index => index + 1)
+        } else {
+            setIsTakingQuiz(false)
         }
 
         setIsCurrentQuestionAnswered(false)
     }
 
+    const handleTryAgain = () => {
+        setCurrentQuestionIndex(0)
+        setCorrectAnswersCount(0)
+        setIsTakingQuiz(true)
+    }
+
     const currentQuestion = QUESTIONS[currentQuestionIndex];
+
+    const navigationButtonText = currentQuestionIndex + 1 === QUESTIONS.length ? "Ver resultado" : "Próxima pergunta"
+
     return (
         <div className={S.container}>
             <div className={S.card}>
-                <div className={S.quiz}>
-                    <header className={S.quizHeader}>
-                        <span className={S.questionCount}>PERGUNTA {currentQuestionIndex+1}/{QUESTIONS.length}</span>
-                        <p className={S.question}>
-                            {currentQuestion.question}
-                        </p>
-                    </header>
+                {isTakingQuiz ? (
+                    <div className={S.quiz}>
+                        <header className={S.quizHeader}>
+                            <span
+                                className={S.questionCount}>PERGUNTA {currentQuestionIndex + 1}/{QUESTIONS.length}</span>
+                            <p className={S.question}>
+                                {currentQuestion.question}
+                            </p>
+                        </header>
 
-                    <ul className={S.answers}>
-                        {currentQuestion.answers.map(answer => (
-                            <li key={answer} className={S.answerItem}>
-                                <QuestionAnswer answer={answer}
-                                                question={currentQuestion}
-                                                handleAnswerQuestion={handleAnswerQuestion}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                    {isCurrentQuestionAnswered && <Button onClick={handleNextQuestion}>Próxima pergunta</Button>}
-                </div>
+                        <ul className={S.answers}>
+                            {currentQuestion.answers.map(answer => (
+                                <li key={answer} className={S.answerItem}>
+                                    <QuestionAnswer answer={answer}
+                                                    question={currentQuestion}
+                                                    handleAnswerQuestion={handleAnswerQuestion}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                        {isCurrentQuestionAnswered && <Button onClick={handleNextQuestion}>{navigationButtonText}</Button>}
+                    </div>
+                ): (
+                    <Result
+                        correctAnswersCount={correctAnswersCount}
+                        questions={QUESTIONS.length}
+                        handleTryAgain={handleTryAgain}
+                    />
+                )}
 
             </div>
 
